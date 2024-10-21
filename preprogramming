@@ -1,0 +1,46 @@
+import OpenCV as cv2
+import json
+import os
+
+def video_to_images(url, output_folder, name):
+    video = cv2.VideoCapture(url)
+
+    if not video.isOpened():
+        print(f"Error: Could not open video {url}")
+        return
+
+    frame_count = 0
+    while True:
+        ret, frame = video.read()
+        if not ret:
+            break
+
+        if frame_count % 10 == 0:
+            filename = f"frame_{frame_count}_{name}.jpg"
+            cv2.imwrite(f"{output_folder}/{filename}", frame)
+        
+        frame_count += 1
+    
+    video.release()
+    cv2.destroyAllWindows()
+
+json_file_path = 'MSASL_val.json'
+#TODO
+output_folder = make output folder
+
+video_num = 1
+with open(json_file_path, 'r') as json_File:
+    load_file = json.load(json_File)
+
+    for video_info in load_file:
+        url = video_info.get('url')
+        name = video_info.get('org_text')
+        subfolder_name = name
+        subfolder_path = os.path.join(output_folder, subfolder_name)
+        os.makedirs(subfolder_path)
+
+        if url:
+            video_to_images(url, subfolder_name, video_num)
+            video_num += 1
+        else:
+            print(f"No URL found for video {video_num}")
