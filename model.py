@@ -126,6 +126,9 @@ def load_data_from_folders(base_folder):
 
     return np.array(data), np.array(labels)
 
+def sanitize_folder_name(name):
+    name = name.replace('\n', '').replace('\r', '')
+    return re.sub(r'[<>:"/\\|?*]', '_', name)
 
 def main():
     with open('MSASL_val.json', 'r') as json_file:
@@ -136,7 +139,7 @@ def main():
         for row in video_info:
             url = row.get('url')
             name = row.get('org_text')
-            subfolder_name = name
+            subfolder_name = sanitize_folder_name(name)
             subfolder_path = os.path.join(output_folder, subfolder_name)
 
             # Create the subfolder, do not raise an error if it already exists
