@@ -128,7 +128,6 @@ def load_data_from_folders(base_folder):
 
 
 def main():
-    video_to_images("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "output_folder", "test_video")
     with open('MSASL_val.json', 'r') as json_file:
         video_info = json.load(json_file)
         output_folder = 'output_folder'
