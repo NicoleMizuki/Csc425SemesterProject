@@ -21,6 +21,7 @@ import cv2
 import os
 
 
+# this function has been altered slightly to try and fix the youtube link issue
 def video_to_images(url, output_folder, name):
     # Download the video from YouTube
     try:
@@ -93,14 +94,12 @@ def video_to_images(url, output_folder, name):
 #             print(f"No URL found for video {video_num}")
 
 
-# Function to extract HOG features from images
 def extract_hog_features(image):
     features, _ = hog(image, orientations=9, pixels_per_cell=(8, 8),
                       cells_per_block=(2, 2), visualize=True, multichannel=True)
     return features
 
 
-# Prepare data and labels
 def load_data_from_folders(base_folder):
     data = []
     labels = []
@@ -112,21 +111,16 @@ def load_data_from_folders(base_folder):
             # Each folder represents a sign (label)
             label = sign_folder
 
-            # Loop through each image in the subfolder
             for img_file in os.listdir(sign_folder_path):
                 img_path = os.path.join(sign_folder_path, img_file)
 
-                # Read image, convert to grayscale if needed
                 img = cv2.imread(img_path)
                 img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-                # Resize to a standard size (important for SVM consistency)
                 img_resized = cv2.resize(img_gray, (128, 128))
 
-                # Extract HOG features
                 features = extract_hog_features(img_resized)
 
-                # Append data and label
                 data.append(features)
                 labels.append(label)
 
